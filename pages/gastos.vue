@@ -73,13 +73,13 @@ const { documents } = data.value;
  }
  resTotal.value = soma;
 
-//  const promise = account.get();
-// promise.then(function (response) {
-//  userName.value = response.name;
-//  console.log(response)
-// }, function (error) {
-//     console.log(error); // Failure
-// });
+ const promise = account.get();
+promise.then(function (response) {
+ userName.value = response.name;
+ console.log(response)
+}, function (error) {
+    console.log(error); // Failure
+});
 
 }
 
