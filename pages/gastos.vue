@@ -22,11 +22,11 @@ const listTotal = ref();
 const searchItems = ref();
 const reloadItems =  ref([]);
 const controlSearch = ref(true)
-definePageMeta({
-  middleware: [
-    'auth',
-  ],
-});
+// definePageMeta({
+//   middleware: [
+//     'auth',
+//   ],
+// });
 
 async function getCategories() {
   const { data } = await useFetch(`/api/categories/dbApp`, {});
