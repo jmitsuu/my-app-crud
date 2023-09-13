@@ -7,11 +7,11 @@ const checkId = ref();
 const editOff = ref(false);
 const newInput = ref();
 const categories = ref();
-definePageMeta({
-  middleware: [
-    'auth',
-  ],
-});
+// definePageMeta({
+//   middleware: [
+//     'auth',
+//   ],
+// });
 async function getCategor() {
   const { data } = await useFetch(`/api/categories/dbApp`, {});
   const { documents } = data.value;
