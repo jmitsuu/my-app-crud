@@ -3,9 +3,11 @@ import account from "~/composables/useAppwrite";
 const message = ref(false)
 const email = ref()
 const password = ref();
+const idSession = ref()
+const idAccount = ref()
 
 const login = async () => {
-    if(!email.value || !password.value) return
+    if(!email.value && !password.value) return
     try {
         const data = await account.createEmailSession(
           
@@ -14,31 +16,21 @@ const login = async () => {
       
           
         )
-        console.log(data)
-        if(data.status == true){
-     
-            message.value = true
-  
-        }
+
     } catch (e) {
         console.log(e.message)
     }
 }
 
-const promise = account.get();
 
-promise.then(function (response) {
-    console.log(response); // Success
-}, function (error) {
-    console.log(error); // Failure
-});
 
-function redirect(){
-    if(!email.value && !password.value) return
-    setTimeout(() => {
-        window.location.href ="/gastos"
-    }, 2000);
-}
+
+// function redirect(){
+//     if(!email.value && !password.value) return
+//     setTimeout(() => {
+//         window.location.href ="/gastos"
+//     }, 2000);
+// }
 
 </script>
 
@@ -56,11 +48,13 @@ function redirect(){
                 <label class="text-[1.2rem]">Senha</label>
                 <input type="password" required v-model="password" class="w-64 py-2 rounded-sm outline-none text-gray-600 font-semibold px-1"
                     placeholder="Senha" />
-               
-                        <button
+               <NuxtLink to="/gastos">
+                <button
                             @click="redirect"
                     class="mt-3 py-1 px-2 rounded-md bg-gray-300 text-slate-600  hover:text-slate-200 transition-all font-semibold w-32 mx-auto hover:bg-gray-700">
                     Logar</button>
+               </NuxtLink>
+                       
                 
               
                     <NuxtLink to="/auth/register">

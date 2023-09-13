@@ -4,7 +4,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   const promise = account.get();
     if(to.path != "/auth/register"){
     promise.then(
-      function (response) {
+      async function (response) {
         if (response.status) {
 
           return navigateTo(to.fullPath);
@@ -17,4 +17,5 @@ export default defineNuxtRouteMiddleware((to, from) => {
         }
       }
     );}
+
 });
