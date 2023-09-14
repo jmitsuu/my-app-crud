@@ -1,21 +1,26 @@
-import account from "../composables/useAppwrite";
 
-export default defineNuxtRouteMiddleware((to, from) => {
-  const promise = account.get();
-    if(to.path != "/auth/register"){
-    promise.then(
-      async function (response) {
-        if (response.status) {
 
-          return navigateTo(to.fullPath);
-        }
-      },
-      function (error) {
-        if (error) {
-          console.log(error.message);
-          return navigateTo(to.path="/auth/login");
-        }
-      }
-    );}
+export default defineNuxtRouteMiddleware(async(to, from) => {
+let isLlogedIn = false
+  
+
+
+const {data} =  await useFetch('/api/auth/dbSupeSignin', {
+
+  })
+
+  data.value.data.filter(item => {
+
+    isLlogedIn = item.auth
+
+  })
+if(!isLlogedIn){
+  return navigateTo(to.path="/auth/login/")
+
+}
+// if(!isLlogedIn){
+//   return navigateTo(to.path="/auth/login/")
+
+// }
 
 });

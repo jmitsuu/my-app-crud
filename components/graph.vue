@@ -10,21 +10,20 @@ const props = defineProps({
   propDate:String
 })
 const data = new Date()
-
  function getdataArr(){
   dataStore.value =  store.duplicados[0]
+  console.log(dataStore.value, 'inside')
   dataStore.value.filter(item=>{
    date.value.push([item.total[0].slice(8,15)])
    price.value.push(item.total[1])
   })
- 
 }
 
 const chartData = ref({
   labels: date,
   datasets: [
     {
-      label: `Grafico` ,
+      label: `Grafico Diario` ,
       backgroundColor: '#f87979',
       data: price,
     },

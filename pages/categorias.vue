@@ -7,15 +7,16 @@ const checkId = ref();
 const editOff = ref(false);
 const newInput = ref();
 const categories = ref();
-// definePageMeta({
-//   middleware: [
-//     'auth',
-//   ],
-// });
+  const rId = Math.random() * (5614654125 - 20516) + 4256;
+definePageMeta({
+  middleware: [
+    'auth',
+  ],
+});
 async function getCategor() {
-  const { data } = await useFetch(`/api/categories/dbApp`, {});
-  const { documents } = data.value;
-  categories.value = documents;
+  const { data } = await useFetch(`/api/categories/dbSuperbase`, {});
+
+  categories.value = data.value.data;
   console.log(data.value);
   editOff.value = true;
 }
@@ -23,18 +24,18 @@ getCategor();
 
 async function pushNewCategory() {
   if (!newCategory.value) return;
-  useFetch(`/api/categories/dbAppCreate`, {
+  useFetch(`/api/categories/dbSupeCreate`, {
     method: "post",
-    body: { title: `${newCategory.value}` },
+    body: JSON.stringify(newCategory.value)
   });
-
+console.log(newCategory.value)
   setTimeout(() => {
     getCategor();
   }, 300);
 }
 
 function deleteCategory(id) {
-  useFetch(`/api/categories/dbAppDelete?id=${id}`,{
+  useFetch(`/api/categories/dbSupeDelete?id=${id}`,{
     method:'delete',
   })
   setTimeout(() => {
@@ -48,11 +49,9 @@ function openEdit(id) {
 function editCategory(id) {
 
   if (!inputNewCategory.value) return;
-  useFetch(`/api/categories/dbAppEdit?id=${id}`, {
+  useFetch(`/api/categories/dbSupUpdate?id=${id}`, {
     method: "patch",
-    body: {
-      title: `${inputNewCategory.value}`
-    },
+    body: JSON.stringify(inputNewCategory.value )
   });
   setTimeout(() => {
     getCategor();
@@ -75,22 +74,22 @@ function editCategory(id) {
           Adicionar
         </button>
       </div>
-      <div class="bg-slate-200 xl:w-[800px]   overflow-y-visible h-2/2 m-h-2/3 bg-opacity-50 rounded-md">
+      <div class="bg-slate-200 xl:w-[800px] mt-3  overflow-y-visible h-2/2 m-h-2/3 bg-opacity-50 rounded-md">
         <h1 class="text-[1.2rem] border-b-2 p-2 font-semibold text-gray-600 mt-8">
           Categorias
         </h1>
      
-        <div  class="text-sm xl:text-lg">
+        <div  class="text-sm xl:text-lg p-2">
           <div
             class="flex mb-4 w-full font-semibold justify-between"
             v-for="item in categories"
-            :key="item.$id"
+            :key="item.id"
           >
             <div>
               <input
                 type="text"
                 v-if="
-                  item.$id == checkId ? (newInput = true) : (newInput = false)
+                  item.id == checkId ? (newInput = true) : (newInput = false)
                 "
                 v-model="inputNewCategory"
                 :placeholder="item.title"
@@ -106,13 +105,13 @@ function editCategory(id) {
               <Icon
                 name="ep:arrow-down-bold"
                 class="text-green-500 hover:text-green-600 cursor-pointer ml-4"
-                v-if="item.$id == checkId ? (editOff = true) : (editOff = false)"
-                @click="editCategory(item.$id)"
+                v-if="item.id == checkId ? (editOff = true) : (editOff = false)"
+                @click="editCategory(item.id)"
               />
               <Icon
                 name="ep:close"
                 class="text-red-500 hover:text-red-600 cursor-pointer ml-2"
-                v-if="item.$id == checkId ? (editOff = true) : (editOff = false)"
+                v-if="item.id == checkId ? (editOff = true) : (editOff = false)"
                 @click="openEdit()"
               />
             </div>
@@ -120,13 +119,13 @@ function editCategory(id) {
             <div class="flex gap-2">
               <p
                 class="text-blue-500 cursor-pointer hover:text-blue-600"
-                @click="openEdit(item.$id)"
+                @click="openEdit(item.id)"
               >
                 Edit
               </p>
               <p
                 class="text-red-500 cursor-pointer hover:text-red-600"
-                @click="deleteCategory(item.$id)"
+                @click="deleteCategory(item.id)"
               >
                 Excluir
               </p>

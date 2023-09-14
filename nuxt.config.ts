@@ -1,13 +1,31 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  css: [
+    '@/assets/css/main.css',
+  ],
   modules: [
+    '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     'nuxt-icon',
 
   
   ],
+  googleFonts: {
+    families: {
+      Roboto: true,
+      Inter: [400, 700],
+       'Josefin+Sans': true,
+      Lato: [100, 300],
+      Raleway: {
+        wght: [100, 400],
+        ital: [100]
+      },
+      download: true
+
+    }
+  },
   runtimeConfig:{
       appwriteApiKey:'',
       databaseKey: '',
@@ -27,15 +45,6 @@ export default defineNuxtConfig({
     '/modify-headers-route': { headers: { 'x-magic-of': 'nuxt and vercel' } },
     '/spa': { ssr: true },
   },
-  imports: {
-    dirs: [
-      // Scan top-level modules
-      'composables',
-      // ... or scan modules nested one level deep with a specific name and file extension
-      'composables/*/index.{ts,js,mjs,mts}',
-      // ... or scan all modules within given directory
-      'composables/**'
-    ]
-  }
+ 
   
 })
