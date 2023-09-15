@@ -12,7 +12,7 @@ const props = defineProps({
 const data = new Date()
  function getdataArr(){
   dataStore.value =  store.duplicados[0]
-  console.log(dataStore.value, 'inside')
+  if(!dataStore.value) return;
   dataStore.value.filter(item=>{
    date.value.push([item.total[0].slice(8,15)])
    price.value.push(item.total[1])

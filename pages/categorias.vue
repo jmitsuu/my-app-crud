@@ -7,6 +7,7 @@ const checkId = ref();
 const editOff = ref(false);
 const newInput = ref();
 const categories = ref();
+const logout = ref()
   const rId = Math.random() * (5614654125 - 20516) + 4256;
 definePageMeta({
   middleware: [
@@ -16,8 +17,12 @@ definePageMeta({
 async function getCategor() {
   const { data } = await useFetch(`/api/categories/dbSuperbase`, {});
 
-  categories.value = data.value.data;
-  console.log(data.value);
+  categories.value =  data.value.data.filter(item=>{
+ return item.email.includes('default') || item.email === store.emailSession
+  })
+ 
+
+
   editOff.value = true;
 }
 getCategor();
@@ -26,9 +31,9 @@ async function pushNewCategory() {
   if (!newCategory.value) return;
   useFetch(`/api/categories/dbSupeCreate`, {
     method: "post",
-    body: JSON.stringify(newCategory.value)
+    body: [newCategory.value, store.emailSession]
   });
-console.log(newCategory.value)
+
   setTimeout(() => {
     getCategor();
   }, 300);
@@ -62,8 +67,58 @@ function editCategory(id) {
 
 <template>
      <LazyMenu />
-  <section class="w-full h-screen  m-2 rounded-3xl px-4  py-3 bg-gray-100">
+     
+  <section class="w-full h-screen relative  m-2 rounded-3xl px-4  py-3 bg-gray-100">
+    
+    <div
+            @click="!logout ? (logout = true) : (logout = false)"
+            class="h-20 block  lg:hidden bg-white absolute rounded-md right-8 px-2  cursor-pointer"
+          >
+            <div class="relative ">
+              <div
+                 v-if="logout"
+                class="absolute flex flex-col right-12   bg-[#663399] text-white  text-center p-2 rounded-md"
+              >
+              
+                <NuxtLink
+                  to="/"
+                  class=" hover:bg-blue-200 rounded-mdtransition-all"
+                  @click="modal = false"
+                  >Home</NuxtLink
+                >
+                <NuxtLink
+                  to="/gastos"
+                  class=" hover:bg-blue-200 rounded-md  transition-all"
+                  @click="modal = false"
+                  >Gastos</NuxtLink
+                >
+                <NuxtLink
+                  to="/categorias"
+                  class=" hover:bg-blue-200 rounded-md transition-all"
+                  @click="modal = false"
+                  >Categorias</NuxtLink
+                >
+                <NuxtLink to="/auth/login">
+
+           
+                <p 
+             
+                @click="store.closeSession"
+                class="text-red-500 bold">Sair</p>
+              </NuxtLink>
+              </div>
+
+              <img
+                src="https://picsum.photos/200"
+                class="rounded-full h-10 w-10 mx-auto my-2 hover:opacity-50 transition duration-500"
+              />
+              <p class="text-center">{{ store.userName }}</p>
+            </div>
+          </div>
+    
     <div class=" h-screen w-full justify-center items-center flex flex-col ">
+
+      
       <h1 class="text-[2.1rem] font-semibold mb-10">Adicionar Categoria</h1>
       <div class="flex flex-col sm:flex-row xl:flex-row md:flex-row lg:flex-row justify-center">
         <input type="text" v-model="newCategory" class="xl:w-64  p-3 rounded-md" />

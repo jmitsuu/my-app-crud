@@ -21,14 +21,11 @@ const searchItems = ref();
 const reloadItems = ref([]);
 const controlSearch = ref(true);
 definePageMeta({
-  middleware: [
-    'auth',
-  ],
+  middleware: ["auth"],
 });
 
 async function getCategories() {
   const { data } = await useFetch(`/api/categories/dbSuperbase`);
-  console.log(data)
   categories.value = data.value.data;
   editOff.value = true;
   categories.value = data.value;
@@ -36,11 +33,16 @@ async function getCategories() {
 async function getItems() {
   const { data, refresh } = await useFetch("/api/listItems/dbSupeItems");
   data.value.data.filter((i) => {
-    listItems.value.push(i.items);
+   
+    if(i.email === store.emailSession){
+      listItems.value.push(i.items);
+    }
+ 
   });
 
   data.value.data.filter((item) => {
-    totalPrices.value.push(
+    if(item.email === store.emailSession){
+      totalPrices.value.push(
       parseFloat(item.items.price.replaceAll("R$", "").replace(",", ""))
     );
 
@@ -48,10 +50,12 @@ async function getItems() {
     dataGraph.value = dataGraph.value.filter((valor, indice, self) => {
       return self.indexOf(valor) === indice;
     });
+      
+    }
+ 
   });
   reloadItems.value = listItems.value;
   store.getGraph(dataGraph.value);
-console.log(dataGraph.value)
   setTimeout(() => {
     store.getGraph(dataGraph.value);
   }, 8000);
@@ -77,7 +81,7 @@ function createItems() {
 
   useFetch(`/api/listItems/dbSupeCreate`, {
     method: "post",
-    body: items,
+    body: [items, store.emailSession]
   });
 
   setTimeout(async () => {
@@ -111,15 +115,21 @@ function logOutSession() {
   });
 }
 getCategories();
-getItems();
-onMounted(() => {});
+
+onMounted(() => {
+  setTimeout(()=>{
+    getItems();
+  },1000)
+});
 </script>
 
 <template>
   <LazyMenu />
-  <section class="w-full flex m-2 overflow-y-scroll rounded-t-3xl bg-gray-50">
+  <section
+    class="w-full flex m-2 overflow-y-scroll rounded-t-3xl bg-gradient-to-b from-[#663399]"
+  >
     <div
-      class="mx-auto mt-8 w-full xl:h-[800px] sm:h-screen h-screen xl:w-4/6 rounded-md bg-blue-800 bg-opacity-10 p-4"
+      class="mx-auto mt-8 w-full xl:w-4/6 rounded-md bg-white bg-opacity-70 p-4"
     >
       <section class="mb-2 w-full">
         <div class="relative flex items-center">
@@ -143,21 +153,43 @@ onMounted(() => {});
           /> -->
           <div
             @click="!logout ? (logout = true) : (logout = false)"
-            class="h-20 block lg:hidden bg-white absolute rounded-md right-0 px-2 py-2 cursor-pointer"
+            class="h-20 block lg:hidden bg-white absolute rounded-md right-0 px-2 cursor-pointer"
           >
-            <img
-              src="https://picsum.photos/200"
-              class="rounded-full h-10 w-10 mx-auto hover:opacity-50 transition duration-500"
-            />
-            <p class="text-center">{{ userName }}</p>
-            <div class="relative text-center w-full">
+            <div class="relative">
               <div
                 v-if="logout"
-                @click="logOutSession"
-                class="h-5 bottom-[-2] text-gray-900 font-semibold absolute p-2 text-center text-[1.1rem] hover:text-gray-500"
+                class="absolute flex flex-col right-12 bg-[#663399] text-white text-center p-2 rounded-md"
               >
-                Sair
+                <NuxtLink
+                  to="/"
+                  class="hover:bg-blue-200 rounded-mdtransition-all"
+                  @click="modal = false"
+                  >Home</NuxtLink
+                >
+                <NuxtLink
+                  to="/gastos"
+                  class="hover:bg-blue-200 rounded-md transition-all"
+                  @click="modal = false"
+                  >Gastos</NuxtLink
+                >
+                <NuxtLink
+                  to="/categorias"
+                  class="hover:bg-blue-200 rounded-md transition-all"
+                  @click="modal = false"
+                  >Categorias</NuxtLink
+                >
+                <NuxtLink to="/auth/login">
+                  <p @click="store.closeSession" class="text-red-500 bold">
+                    Sair
+                  </p>
+                </NuxtLink>
               </div>
+
+              <img
+                src="https://picsum.photos/200"
+                class="rounded-full h-10 w-10 mx-auto my-2 hover:opacity-50 transition duration-500"
+              />
+              <p class="text-center">{{ store.userName }}</p>
             </div>
           </div>
         </div>
@@ -214,7 +246,7 @@ onMounted(() => {});
 
           <div>
             <div
-              class="float-right bg-green-800 text-white font-semibold rounded-md p-3 cursor-pointer"
+              class="float-right bg-green-800 mb text-white font-semibold rounded-md p-3 cursor-pointer"
               @click="!modalCateg ? (modalCateg = true) : (modalCateg = false)"
             >
               Nova transação
@@ -312,10 +344,10 @@ onMounted(() => {});
             :key="item.id"
           >
             <div class="">
-              <span class="text-[0.9rem] ">
+              <span class="text-[0.9rem]">
                 {{ item.date }}
               </span>
-              <p class=" text-md">
+              <p class="text-md">
                 <span class="bg-blue-300 text-blue-900 px-[0.2rem] rounded-md">
                   #{{ item.category }}
                 </span>

@@ -7,9 +7,9 @@ export default defineEventHandler(async (event)=>{
   const body = await readBody(event)
   
   const supabase = createClient(config.secret.supabaseUrl, config.secret.supabaseKey)
-  const { data, error } = await supabase  .from('categories')
+  const { data, error } = await supabase  .from('users')
   .insert([
-    { id:rId.toFixed(0),  title:body[0],email:body[1]  },
+    { id:rId.toFixed(0),  email:body[0], password:body[1], name:body[2], auth:false  },
   ])
   .select();
 return{

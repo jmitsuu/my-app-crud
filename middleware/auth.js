@@ -14,6 +14,7 @@ const {data} =  await useFetch('/api/auth/dbSupeSignin', {
     isLlogedIn = item.auth
 
   })
+  console.log(isLlogedIn)
 if(!isLlogedIn){
   return navigateTo(to.path="/auth/login/")
 
