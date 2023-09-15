@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     '@/assets/css/main.css',
   ],
   modules: [
+ 
     '@nuxtjs/google-fonts',
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -14,6 +15,16 @@ export default defineNuxtConfig({
 
   
   ],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+     cssnano:
+       process.env.NODE_ENV === 'production'
+         ? { preset: ['default', { discardComments: { removeAll: true } }] }
+         : false, // disable cssnano when not in production
+    },
+ },
 
   googleFonts: {
     families: {

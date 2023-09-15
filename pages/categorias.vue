@@ -16,7 +16,7 @@ const logout = ref()
 //   ],
 // });
 async function getCategor() {
-  const { data } = await useFetch(`/api/categories/dbSuperbase`, {});
+  const { data } = await useAsyncData(`/api/categories/dbSuperbase`, {});
 
   categories.value =  data.value.data.filter(item=>{
  return item.email.includes('default') || item.email === store.emailSession

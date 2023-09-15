@@ -13,7 +13,7 @@ const {data} =  await useFetch('/api/auth/dbSupeSignin', {
 
   data.value.data.filter(item => {
     if(item.auth){
-        isLlogedIn = item.auth
+  isLlogedIn = item.auth
     }
   
 
