@@ -9,9 +9,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
     'nuxt-icon',
+    
+   
 
   
   ],
+
   googleFonts: {
     families: {
       Roboto: true,
@@ -29,10 +32,11 @@ export default defineNuxtConfig({
   runtimeConfig:{
       appwriteApiKey:'',
       databaseKey: '',
- 
+      supabaseKey: process.env.SUPABASE_KEY,
+      supabaseUrl: process.env.SUPABASE_URL,
       secret:{
-        supabaseKey: process.env.NUXT_SUPABASE_KEY,
-        supabaseUrl: process.env.NUXT_SUPABASE_URL,
+        supabaseKey: process.env.SUPABASE_KEY,
+        supabaseUrl: process.env.SUPABASE_URL,
       },
       public:{
         
@@ -45,6 +49,8 @@ export default defineNuxtConfig({
     '/modify-headers-route': { headers: { 'x-magic-of': 'nuxt and vercel' } },
     '/spa': { ssr: true },
   },
+  
+  
  
   
 })
