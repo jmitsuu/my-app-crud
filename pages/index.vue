@@ -158,7 +158,7 @@ onMounted(() => {
             <div class="relative">
               <div
                 v-if="logout"
-                class="absolute flex flex-col right-12 bg-[#663399] text-white text-center p-2 rounded-md"
+                class="absolute flex flex-col right-12 text-2xl z-50 bg-[#663399] text-white text-center p-2 rounded-md"
               >
                 <NuxtLink
                   to="/"
