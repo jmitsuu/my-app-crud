@@ -12,13 +12,16 @@ const {data} =  await useFetch('/api/auth/dbSupeSignin', {
   })
  if(!data.value) return
   data.value.data.filter(item => {
-  
-    // const idStore = nuxtStorage.localStorage.getData('key');
-    if(item.auth === true  && to.path !== '/auth/login/'){
-      isLlogedIn = item.auth;
-      return navigateTo(to.path="/auth/login/")
-      console.log('passou')
-    }
+ if(item.auth){
+    isLlogedIn = item.auth
+      }
+
+    
+    // if(item.auth === true  && to.path !== '/auth/login/'){
+    //   isLlogedIn = item.auth;
+    //   return navigateTo(to.path="/auth/login/")
+    //   console.log('passou')
+    // }
 
 console.log(item.auth)
 
