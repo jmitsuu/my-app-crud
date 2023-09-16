@@ -31,9 +31,10 @@ duplicados.value.push(allDate.value)
   
 function getUserName(){
   const cred = localStorage.getItem('credentials')
+  if(!cred) return;
   const storage = JSON.parse(cred)
   if(!storage){
-    window.location.href="/auth/login"
+    window.location.href="/auth/login/"
   }
   userName.value =storage.name
 idSession.value = storage.id
