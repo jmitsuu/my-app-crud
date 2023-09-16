@@ -30,7 +30,7 @@ async function getCategories() {
  return item.email.includes('default') || item.email === store.emailSession
   })
  
-  console.log(categories.value)
+  // console.log(categories.value)
   // categories.value = data.value;
 }
 async function getItems() {
