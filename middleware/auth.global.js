@@ -10,7 +10,7 @@ let isLlogedIn = false
 const {data} =  await useFetch('/api/auth/dbSupeSignin', {
 
   })
-
+ if(!data.value) return
   data.value.data.filter(item => {
   
     // const idStore = nuxtStorage.localStorage.getData('key');
