@@ -17,9 +17,13 @@ const login = async () => {
     
       if (item.email.indexOf(email.value) === -1 || item.password.indexOf(password.value) === -1) {
         
-        waitMessage.value = false;
-        message.value = 'usuario ou senha errados'
-       
+        waitMessage.value = false
+        message.value = 'Usuario ou senha incorretos'
+        setTimeout(() => {
+      
+        message.value = ''
+        }, 3000);
+        console.log(waitMessage.value ,'is false?')
       } else {
       
       localStorage.setItem(
@@ -29,9 +33,16 @@ const login = async () => {
       nuxtStorage.localStorage.setData('key', item.id, 1 , "h")
       authorization(item);
       spin.value = true;
-      waitMessage.value = true;
-        message.value = 'Login Realizado'
+      message.value = 'Login realizado'
+      setTimeout(() => {
+      
+      message.value = ''
+      }, 3000);
+      waitMessage.value = true
+        redirect()
+
       }
+    
     });
   } catch (error) {
     console.log(error);
@@ -58,6 +69,9 @@ async function authorization(id) {
 function redirect() {
   setTimeout(() => {
     window.location.href = "/gastos";
+    message.value = '',
+    email.value = '',
+    password.value = ''
   }, 2000);
 }
 </script>
@@ -86,7 +100,7 @@ function redirect() {
         />
 
         <button
-          @click="redirect"
+    
           class="mt-3 py-1 px-2 rounded-md bg-gray-300 text-slate-600 hover:text-slate-200 transition-all font-semibold w-32 mx-auto hover:bg-gray-700"
         >
           <Icon
@@ -115,7 +129,7 @@ function redirect() {
        {{ message }}
       </h1>
       
-      <h1 v-else class="text-center text-red-600">
+      <h1 v-if="!waitMessage" class="text-center text-red-600">
        {{ message }}
       </h1>
     </div>

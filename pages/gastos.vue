@@ -16,7 +16,7 @@ const modalControl = ref(false);
 const modalNewCat = ref(false);
 const dataGraph = ref([]);
 const listTotal = ref();
-
+const spin = ref();
 const searchItems = ref();
 const reloadItems = ref([]);
 const controlSearch = ref(true);
@@ -26,36 +26,32 @@ const controlSearch = ref(true);
 
 async function getCategories() {
   const { data } = await useFetch(`/api/categories/dbSuperbase`);
-  categories.value = data.value.data.filter(item=>{
- return item.email.includes('default') || item.email === store.emailSession
-  })
- 
-  // console.log(categories.value)
+  categories.value = data.value.data.filter((item) => {
+    return item.email.includes("default") || item.email === store.emailSession;
+  });
+
+  console.log(categories.value);
   // categories.value = data.value;
 }
 async function getItems() {
   const { data, refresh } = await useFetch("/api/listItems/dbSupeItems");
   data.value.data.filter((i) => {
-   
-    if(i.email === store.emailSession){
+    if (i.email === store.emailSession) {
       listItems.value.push(i.items);
     }
- 
   });
 
   data.value.data.filter((item) => {
-    if(item.email === store.emailSession){
+    if (item.email === store.emailSession) {
       totalPrices.value.push(
-      parseFloat(item.items.price.replaceAll("R$", "").replace(",", ""))
-    );
+        parseFloat(item.items.price.replaceAll("R$", "").replace(",", ""))
+      );
 
-    dataGraph.value.push(item.items);
-    dataGraph.value = dataGraph.value.filter((valor, indice, self) => {
-      return self.indexOf(valor) === indice;
-    });
-      
+      dataGraph.value.push(item.items);
+      dataGraph.value = dataGraph.value.filter((valor, indice, self) => {
+        return self.indexOf(valor) === indice;
+      });
     }
- 
   });
   reloadItems.value = listItems.value;
   store.getGraph(dataGraph.value);
@@ -82,10 +78,11 @@ function createItems() {
     price: price.value,
   };
 
-  useFetch(`/api/listItems/dbSupeCreate`, {
+  const { refresh } = useFetch(`/api/listItems/dbSupeCreate`, {
     method: "post",
-    body: [items, store.emailSession]
+    body: [items, store.emailSession],
   });
+  spin.value = refresh();
   setTimeout(async () => {
     //ok this is as a bad idea iknow, but i searching somthing better than this
     window.location.reload();
@@ -96,9 +93,14 @@ const itemsFiltered = computed(() => {
   if (listItems.value && searchItems.value) {
     listItems.value = listItems.value.filter((item) => {
       controlSearch.value = false;
-      return item.description
-        .toLowerCase()
-        .includes(searchItems.value.toLowerCase());
+      return (
+        item.description
+          .toLowerCase()
+          .includes(searchItems.value.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchItems.value.toLowerCase())
+        ||
+        item.date.toLowerCase().includes(searchItems.value.toLowerCase())
+      );
     });
   } else {
     controlSearch.value = true;
@@ -116,19 +118,22 @@ function logOutSession() {
     });
   });
 }
-getCategories();
 
+const scrollTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+getCategories();
 onMounted(() => {
-  setTimeout(()=>{
+  setTimeout(() => {
     getItems();
-  },1000)
+  }, 1000);
 });
 </script>
 
 <template>
   <LazyMenu />
   <section
-    class="w-full flex m-2 overflow-y-scroll rounded-t-3xl bg-gradient-to-b from-[#663399]"
+    class="w-full flex m-2 rounded-t-3xl bg-gradient-to-b from-[#663399]"
   >
     <div
       class="mx-auto mt-8 w-full xl:w-4/6 rounded-md bg-white shadow-2xl shadow-black bg-opacity-70 p-4"
@@ -155,19 +160,19 @@ onMounted(() => {
           /> -->
           <div
             @click="!logout ? (logout = true) : (logout = false)"
-            class="h-20 block lg:hidden bg-white absolute rounded-md right-0 px-2 cursor-pointer"
+            class="h-20 block mt-4 lg:hidden mb-7 bg-white absolute rounded-md right-0 px-2 cursor-pointer"
           >
             <div class="relative">
               <div
                 v-if="logout"
                 class="absolute flex flex-col right-12 text-2xl z-50 bg-[#663399] text-white text-center p-2 rounded-md"
               >
-                <NuxtLink
+                <!-- <NuxtLink
                   to="/"
                   class="hover:bg-blue-200 rounded-mdtransition-all"
                   @click="modal = false"
                   >Home</NuxtLink
-                >
+                > -->
                 <NuxtLink
                   to="/gastos"
                   class="hover:bg-blue-200 rounded-md transition-all"
@@ -215,13 +220,14 @@ onMounted(() => {
           </div>
         </div>
       </section>
-      <section class="w-full flex-1 border-2 p-2 relative">
+      <section class="w-full flex-1 border-2 p-2 l h-screen relative">
         <div
           class="w-full relative flex justify-between flex-col xl:flex-row items-center py-2 px-1 rounded-md mt-16"
         >
-          <div class="flex mb-6 bg-white py-1 w-60 rounded-md">
+          <!-- <div class="flex mb-6 bg-white py-1 w-60 rounded-md">
+          
             <div
-              class="relative w-60 z-50 justify-center flex flex-col cursor-pointer hover:bg-gray-50 h-9 rounded-md bg-white"
+              class="relative w-60  z-50 justify-center flex flex-col cursor-pointer hover:bg-gray-50 h-9 rounded-md bg-white"
               @click="
                 !modalControl ? (modalControl = true) : (modalControl = false)
               "
@@ -239,12 +245,13 @@ onMounted(() => {
                   class="text-center w-full hover:bg-blue-300"
                   v-for="item in categories"
                   :key="item.id"
+                  @click="selectCategory(item.title)"
                 >
                   {{ item.title }}
                 </p>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div>
             <div
@@ -336,11 +343,18 @@ onMounted(() => {
           </div>
         </div>
         <!-- <div v-if="pending">Loading...</div> -->
+
         <div
-          v-else
-          class="grid xl:grid-cols-2 2xl:grid-cols-3 grid-cols-1 gap-2 p-2 max-h-80 overflow-y-scroll"
+          class="grid xl:grid-cols-2 2xl:grid-cols-3 overflow-y-scroll grid-cols-1 gap-2 p-2"
         >
+          <Icon
+            v-if="spin"
+            name="svg-spinners:90-ring-with-bg"
+            color="black"
+            class="z-50 w-6 h-6 m-auto"
+          />
           <div
+            v-else
             class="mb-2 p-2 flex w-full bg-white rounded-md bg-opacity-50 hover:bg-slate-300 transition-all cursor-pointer shadow shadow-gray-600"
             v-for="item in itemsFiltered"
             :key="item.id"
@@ -367,6 +381,12 @@ onMounted(() => {
               </p>
             </div>
           </div>
+          <Icon
+            @click="scrollTop"
+            name="charm:arrow-up"
+            color="black"
+            class="z-50 w-6 h-6 m-auto absolute right-0 bottom-1 cursor-pointer"
+          />
         </div>
       </section>
     </div>

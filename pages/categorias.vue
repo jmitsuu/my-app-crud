@@ -81,12 +81,12 @@ function editCategory(id) {
                 class="absolute flex flex-col right-12  text-2xl z-50  bg-[#663399] text-white  text-center p-2 rounded-md"
               >
               
-                <NuxtLink
+                <!-- <NuxtLink
                   to="/"
                   class=" hover:bg-blue-200 rounded-mdtransition-all"
                   @click="modal = false"
                   >Home</NuxtLink
-                >
+                > -->
                 <NuxtLink
                   to="/gastos"
                   class=" hover:bg-blue-200 rounded-md  transition-all"

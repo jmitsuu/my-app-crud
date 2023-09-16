@@ -26,9 +26,12 @@ const controlSearch = ref(true);
 
 async function getCategories() {
   const { data } = await useFetch(`/api/categories/dbSuperbase`);
-  categories.value = data.value.data;
-  editOff.value = true;
-  categories.value = data.value;
+  categories.value = data.value.data.filter(item=>{
+ return item.email.includes('default') || item.email === store.emailSession
+  })
+ 
+  console.log(categories.value)
+  // categories.value = data.value;
 }
 async function getItems() {
   const { data, refresh } = await useFetch("/api/listItems/dbSupeItems");
@@ -58,7 +61,7 @@ async function getItems() {
   store.getGraph(dataGraph.value);
   setTimeout(() => {
     store.getGraph(dataGraph.value);
-  }, 8000);
+  }, 1000);
 
   const numeros = totalPrices.value;
   let soma = 0;
@@ -83,7 +86,6 @@ function createItems() {
     method: "post",
     body: [items, store.emailSession]
   });
-
   setTimeout(async () => {
     //ok this is as a bad idea iknow, but i searching somthing better than this
     window.location.reload();
@@ -126,10 +128,10 @@ onMounted(() => {
 <template>
   <LazyMenu />
   <section
-    class="w-full flex m-2 overflow-y-scroll rounded-t-3xl bg-gradient-to-b from-[#663399]"
+    class="w-full flex m-2  rounded-t-3xl bg-gradient-to-b from-[#663399]"
   >
     <div
-      class="mx-auto mt-8 w-full xl:w-4/6 rounded-md bg-white bg-opacity-70 p-4"
+      class="mx-auto mt-8 w-full xl:w-4/6 rounded-md bg-white shadow-2xl shadow-black bg-opacity-70 p-4"
     >
       <section class="mb-2 w-full">
         <div class="relative flex items-center">
@@ -153,19 +155,19 @@ onMounted(() => {
           /> -->
           <div
             @click="!logout ? (logout = true) : (logout = false)"
-            class="h-20 block lg:hidden bg-white absolute rounded-md right-0 px-2 cursor-pointer"
+            class="h-20 block lg:hidden mb-7 bg-white absolute rounded-md right-0 px-2 cursor-pointer"
           >
             <div class="relative">
               <div
                 v-if="logout"
                 class="absolute flex flex-col right-12 text-2xl z-50 bg-[#663399] text-white text-center p-2 rounded-md"
               >
-                <NuxtLink
+                <!-- <NuxtLink
                   to="/"
                   class="hover:bg-blue-200 rounded-mdtransition-all"
                   @click="modal = false"
                   >Home</NuxtLink
-                >
+                > -->
                 <NuxtLink
                   to="/gastos"
                   class="hover:bg-blue-200 rounded-md transition-all"
@@ -303,7 +305,7 @@ onMounted(() => {
                   class="text-gray-500 hover:text-green-600 cursor-pointer absolute right-3"
                 />
                 <div
-                  class="absolute top-7 w-full rounded-md bg-blue-950 text-white font-semibold"
+                  class="absolute bottom-7  w-full rounded-md bg-blue-950 text-white font-semibold"
                   v-if="modalNewCat"
                 >
                   <p

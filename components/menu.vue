@@ -21,7 +21,7 @@ onMounted(()=>{
     <nav class="flex flex-col  text-white gap-10 text-center font-bold  ">
     
     
-    <NuxtLink to="/" class="mr-2 hover:bg-blue-200  rounded-md py-2 transition-all">Home</NuxtLink>
+    <!-- <NuxtLink to="/" class="mr-2 hover:bg-blue-200  rounded-md py-2 transition-all">Home</NuxtLink> -->
     <NuxtLink to="/gastos" class="mr-2  hover:bg-blue-200  rounded-md py-2 transition-all">Gastos</NuxtLink>
     <NuxtLink to="/categorias" class="mr-2  hover:bg-blue-200  rounded-md py-2 transition-all">Categorias</NuxtLink>
     </nav>
