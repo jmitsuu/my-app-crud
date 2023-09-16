@@ -26,7 +26,9 @@ const controlSearch = ref(true);
 
 async function getCategories() {
   const { data } = await useFetch(`/api/categories/dbSuperbase`);
-  categories.value = data.value.data;
+  categories.value = data.value.data.filter(item=>{
+ return item.email.includes('default') || item.email === store.emailSession
+  })
  
   console.log(categories.value)
   // categories.value = data.value;
