@@ -1,5 +1,5 @@
 
-import nuxtStorage from 'nuxt-storage';
+// import nuxtStorage from 'nuxt-storage';
 export default defineNuxtRouteMiddleware(async(to, from) => {
 let isLlogedIn = false
   
@@ -13,7 +13,7 @@ const {data} =  await useFetch('/api/auth/dbSupeSignin', {
 
   data.value.data.filter(item => {
   
-    const idStore = nuxtStorage.localStorage.getData('key');
+    // const idStore = nuxtStorage.localStorage.getData('key');
     if(item.auth === true  && to.path !== '/auth/login/'){
       isLlogedIn = item.auth;
       return navigateTo(to.path="/auth/login/")
