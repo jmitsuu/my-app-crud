@@ -20,8 +20,4 @@ const {data} =  await useFetch('/api/auth/dbSupeSignin', {
     }
   })
 
-// if(to.path != "/auth/register")
-// if (!isLlogedIn && to.path !== '/auth/login/') {
-//   return navigateTo(to.path="/auth/login/")
-// }
 });
