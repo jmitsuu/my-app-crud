@@ -1,5 +1,8 @@
 import data from "./database.json"
 
 export default eventHandler( async (id)=>{
-return  $fetch(`https://barber-api-lovat.vercel.app/data/`)
+  const token = localStorage.getItem("credentials")
+return {
+  token
+}
 })

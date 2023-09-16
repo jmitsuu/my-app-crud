@@ -1,11 +1,11 @@
 <script setup>
-
+import nuxtStorage from 'nuxt-storage';
 const message = ref('');
 const email = ref();
 const password = ref();
 const spin = ref(false);
 const waitMessage = ref();
-
+;
 const login = async () => {
   // if (!email.value && !password.value) return
   try {
@@ -26,6 +26,7 @@ const login = async () => {
         "credentials",
         JSON.stringify({ id: item.id, name: item.name, email:item.email })
       );
+      nuxtStorage.localStorage.setData('key', item.id, 1 , "h")
       authorization(item);
       spin.value = true;
       waitMessage.value = true;

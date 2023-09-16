@@ -26,6 +26,7 @@
     "chart.js": "^4.4.0",
     "dotenv": "^16.3.1",
     "node-appwrite": "^10.0.1",
+    "nuxt-storage": "^1.2.2",
     "pinia": "^2.1.6",
     "v-click-outside": "^3.2.0",
     "vue-chartjs": "^5.2.0"
