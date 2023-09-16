@@ -305,7 +305,7 @@ onMounted(() => {
                   class="text-gray-500 hover:text-green-600 cursor-pointer absolute right-3"
                 />
                 <div
-                  class="absolute top-7 w-full rounded-md bg-blue-950 text-white font-semibold"
+                  class="absolute bottom-7 w-full rounded-md bg-blue-950 text-white font-semibold"
                   v-if="modalNewCat"
                 >
                   <p
