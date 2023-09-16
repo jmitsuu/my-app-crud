@@ -22,14 +22,11 @@ const {data} =  await useFetch('/api/auth/dbSupeSignin', {
     //   return navigateTo(to.path="/auth/login/")
     //   console.log('passou')
     // }
-
-console.log(item.auth)
-
-  })
  
-  console.log(isLlogedIn)
-  // if(item.auth){
-  //   isLlogedIn = item.auth
-  //     }
+  
+if(to.path != "/auth/register")
+if (!isLlogedIn && to.path !== '/auth/login/') {
+  return navigateTo(to.path="/auth/login/")
+}
 
 });
