@@ -29,17 +29,17 @@ duplicados.value.push(allDate.value)
 
 }
   
-// function getUserName(){
-//   const cred = localStorage.getItem('credentials');
+function getUserName(){
+  const cred = localStorage.getItem('credentials');
  
-//   const storage = JSON.parse(cred)
-//   if(!storage){
-//     window.location.href="/404/"
-//   }
-//   userName.value =storage.name
-// idSession.value = storage.id
-// emailSession.value = storage.email
-// }
+  const storage = JSON.parse(cred)
+  // if(!storage){
+  //   window.location.href="/404/"
+  // }
+  userName.value =storage.name
+idSession.value = storage.id
+emailSession.value = storage.email
+}
 
 
 async function closeSession(){
